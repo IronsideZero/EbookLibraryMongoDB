@@ -1,0 +1,20 @@
+﻿@model User
+ 
+<h1 class="bg-info text-white">Create User</h1>
+<div asp-validation-summary="All" class="text-danger"></div>
+ 
+@if (ViewBag.Message != null)
+{
+    <div class="p-1 mb-2 bg-success text-white">@ViewBag.Message</div>
+}
+<form method="post">
+    <div class="form-group">
+        <label asp-for="UserEmail"></label>
+        <input asp-for="UserEmail" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Password"></label>
+        <input asp-for="Password" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>

@@ -1,0 +1,80 @@
+﻿@model EbookLibraryMongoDB.Models.User
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<div>
+    <h4>User</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.UserEmail)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.UserEmail)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Password)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Password)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Salt)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Salt)
+        </dd>
+    </dl>
+</div>
+<div>
+    <table class="bookTable">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Series</th>
+            <th>Published</th>
+            <th>Series</th>
+            <th>Series Postion</th>
+            <th>Owned</th>
+            <th>Average Price</th>
+            <th>Pages</th>
+            <th>Location</th>
+            <th>Language</th>
+            <th>ISBN</th>
+            <th></th>
+        </tr>
+    </thead>
+    
+    @foreach (var book in Model.Books)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => book.Title)</td>
+            <td>@Html.DisplayFor(modelItem => book.Author)</td>
+            <td>@Html.DisplayFor(modelItem => book.Series)</td>
+            <td>@Html.DisplayFor(modelItem => book.PubDate)</td>
+            <td>@Html.DisplayFor(modelItem => book.Series)</td>
+            <td>@Html.DisplayFor(modelItem => book.PosInSeries)</td>
+            <td>@Html.DisplayFor(modelItem => book.Owned)</td>
+            <td>@Html.DisplayFor(modelItem => book.AvgPrice)</td>
+            <td>@Html.DisplayFor(modelItem => book.Pages)</td>
+            <td>@Html.DisplayFor(modelItem => book.LocalFilePath)</td>
+            <td>@Html.DisplayFor(modelItem => book.Language)</td>
+            <td>@Html.DisplayFor(modelItem => book.ISBN)</td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new {id = book.Id}) |
+                @Html.ActionLink("Details", "Details", new {id = book.Id}) |
+                @Html.ActionLink("Delete", "Delete", new {id = book.Id}) 
+            </td>
+        </tr>
+    }
+    </table>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
