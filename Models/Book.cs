@@ -50,7 +50,7 @@ namespace EbookLibraryMongoDB.Models
         public string Language { get; set; }
         
         [BsonElement("Tags")]
-        public List<Tag> Tags { get; set; }
+        public List<BookTag> Tags { get; set; }
         
         [BsonElement("Description")]
         public string Description { get; set; }
@@ -60,7 +60,7 @@ namespace EbookLibraryMongoDB.Models
 
         }
         
-        public Book(string isbn, string title, string author, DateTime pubDate, string series, int posInSeries, bool owned, double avgPrice, string localFilePath, int pages, string language, List<Tag> tags, string description)
+        public Book(string isbn, string title, string author, DateTime pubDate, string series, int posInSeries, bool owned, double avgPrice, string localFilePath, int pages, string language, List<BookTag> tags, string description)
         {
             ISBN = isbn;
             Title = title;

@@ -57,6 +57,7 @@ namespace EbookLibraryMongoDB
             services.AddControllersWithViews();
             services.AddScoped<BookService>();
             services.AddScoped<UserService>();
+            services.AddScoped<DatabaseService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

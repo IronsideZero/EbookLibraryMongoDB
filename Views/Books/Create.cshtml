@@ -1,0 +1,106 @@
+﻿@model EbookLibraryMongoDB.Models.Book
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Book</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        @if(TempData["Message"] != null)
+            {
+                <p>@TempData["Message"]</p>
+            }
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+@*            <div class="form-group">
+                <label asp-for="Id" class="control-label"></label>
+                <input asp-for="Id" class="form-control" />
+                <span asp-validation-for="Id" class="text-danger"></span>
+            </div>*@
+            <div class="form-group">
+                <label asp-for="ISBN" class="control-label"></label>
+                <input asp-for="ISBN" class="form-control" />
+                <span asp-validation-for="ISBN" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Author" class="control-label"></label>
+                <input asp-for="Author" class="form-control" />
+                <span asp-validation-for="Author" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PubDate" class="control-label"></label>
+                @*<input asp-for="PubDate" class="form-control" />*@
+                <input class="form-control" type="datetime-local" data-val="true" max=@DateTime.Today id="PubDate" name="PubDate" value="">
+                <span asp-validation-for="PubDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Series" class="control-label"></label>
+                <input asp-for="Series" class="form-control" />
+                <span asp-validation-for="Series" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PosInSeries" class="control-label"></label>
+                @*<input asp-for="PosInSeries" class="form-control" />*@
+                <input class="form-control" type="number" data-val="true" id="PosInSeries" name="PosInSeries" value="">
+                <span asp-validation-for="PosInSeries" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Owned" /> @Html.DisplayNameFor(model => model.Owned)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="AvgPrice" class="control-label"></label>
+                @*<input asp-for="AvgPrice" class="form-control" />*@
+                <input class="form-control" type="text" data-val="true" data-val-number="The field AvgPrice must be a number." min="0.0" id="AvgPrice" name="AvgPrice" value="">
+                <span asp-validation-for="AvgPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LocalFilePath" class="control-label"></label>
+                <input asp-for="LocalFilePath" class="form-control" />
+                <span asp-validation-for="LocalFilePath" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Pages" class="control-label"></label>
+                @*<input asp-for="Pages" class="form-control" />*@
+                <input class="form-control" type="number" data-val="true" id="Pages" name="Pages" value="">
+                <span asp-validation-for="Pages" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Language" class="control-label"></label>
+                <input asp-for="Language" class="form-control" />
+                <span asp-validation-for="Language" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Tags" class="control-label"></label><label style="font-size:12px; color:grey"> (separated by commas)</label>
+                <input asp-for="Tags" class="form-control" />
+                <span asp-validation-for="Tags" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-controller="User" asp-action="Index">Back</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

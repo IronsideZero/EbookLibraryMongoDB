@@ -12,6 +12,7 @@ namespace EbookLibraryMongoDB.Controllers
     {
         private IConfiguration config;
         private UserService userService;
+        //private readonly DatabaseService db;
 
         public LoginController(IConfiguration config)
         {

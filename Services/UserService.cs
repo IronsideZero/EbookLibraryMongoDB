@@ -4,6 +4,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using System;
+using MongoDB.Bson;
 
 namespace EbookLibraryMongoDB.Services
 {
@@ -17,7 +18,7 @@ namespace EbookLibraryMongoDB.Services
             MongoClient client = new MongoClient(config.GetConnectionString("EbookLibMongo"));
             IMongoDatabase database = client.GetDatabase("EbookOrganizerDB");
             users = database.GetCollection<User>("Users");
-            bookService = new BookService(config);
+            //bookService = new BookService(config);
         }
 
         /// <summary>
@@ -107,7 +108,7 @@ namespace EbookLibraryMongoDB.Services
         /// Method to add a book to a user's library
         /// </summary>
         /// <param all book properties except Id primary key></param>
-        public void UpdateAddBook(User user, string isbn, string title, string author, DateTime pubDate, string series, int posInSeries, bool owned, double avgPrice, string localFilePath, int pages, string language, List<Models.Tag> tags, string description)
+        public void UpdateAddBook(User user, string isbn, string title, string author, DateTime pubDate, string series, int posInSeries, bool owned, double avgPrice, string localFilePath, int pages, string language, List<Models.BookTag> tags, string description)
         {
             
             bool alreadyExists = false;
@@ -120,6 +121,14 @@ namespace EbookLibraryMongoDB.Services
 
             }
             user.Books.Add(newBook);
+        }
+
+        public void UpdateAddBook(User user, Book book)
+        {
+            user.Books.Add(book);
+            var filter = Builders<User>.Filter.Eq("UserEmail", user.UserEmail);//set the filter so this only affects a document where the "UserEmail" field equals user.UserEmail
+            var update = Builders<User>.Update.Set("Books", user.Books);//on the document the filter allows through, set the "Books" field to be user.Books
+            var result = users.UpdateOne(filter, update);
         }
     }
 }

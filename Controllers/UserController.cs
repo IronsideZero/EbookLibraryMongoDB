@@ -9,10 +9,12 @@ namespace EbookLibraryMongoDB.Controllers
     public class UserController : Controller
     {
         private readonly UserService userService;
+        private readonly DatabaseService db;
 
-        public UserController(UserService userService)
+        public UserController(UserService userService, DatabaseService db)
         {
             this.userService = userService;
+            this.db = db;
         }
 
         // GET: UserController
@@ -20,8 +22,9 @@ namespace EbookLibraryMongoDB.Controllers
         {
             //will need to check the user that just logged in here. Cookie with jwt?
             string sessionOwner = HttpContext.Session.GetString("User");
-            User user = userService.Get(sessionOwner);
-            if(user != null)
+            //User user = userService.Get(sessionOwner);
+            User user = db.GetUser(sessionOwner);
+            if (user != null)
             {
                 return View(user);
             } else

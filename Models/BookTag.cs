@@ -6,7 +6,7 @@ using System;
 
 namespace EbookLibraryMongoDB.Models
 {
-    public class Tag
+    public class BookTag
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
@@ -14,5 +14,10 @@ namespace EbookLibraryMongoDB.Models
 
         [BsonElement("Name")]
         public string Name { get; set; }
+
+        public BookTag(string name)
+        {
+            this.Name = name;
+        }
     }
 }
