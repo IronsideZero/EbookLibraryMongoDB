@@ -49,20 +49,40 @@ namespace EbookLibraryMongoDB.Services
         }
 
         /// <summary>
-        /// This method checks if a user exists in the database, based on email. Returns 1 if they do not exist, -1 if they do. 
+        /// Method for getting a user based on an already validated user email stored in the session
         /// </summary>
         /// <param name="email"></param>
         /// <returns></returns>
-        public int GetExisting(string email)
+        public User Get(string email)
+        {
+            User user = users.Find(user => user.UserEmail == email).FirstOrDefault();
+            if (user != null)
+            {
+                return user;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// This method checks if a user exists in the database, based on email. Returns false if they do not exist, true if they do. 
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        public bool UserExists(string email)
         {
             User userToValidate = users.Find<User>(user => user.UserEmail == email).FirstOrDefault();                  
             
             if( userToValidate != null )
             {
-                return -1;
+                //user was found
+                return true;
             } else
             {
-                return 1;
+                //user doesn't exist
+                return false;
             }
         }
 

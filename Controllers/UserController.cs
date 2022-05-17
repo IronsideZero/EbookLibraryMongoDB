@@ -19,7 +19,15 @@ namespace EbookLibraryMongoDB.Controllers
         public ActionResult Index()
         {
             //will need to check the user that just logged in here. Cookie with jwt?
-            return View();
+            string sessionOwner = HttpContext.Session.GetString("User");
+            User user = userService.Get(sessionOwner);
+            if(user != null)
+            {
+                return View(user);
+            } else
+            {
+                return RedirectToAction("Index", "Login", new { area = "" });
+            }
         }
 
         // GET: UserController/Details/5

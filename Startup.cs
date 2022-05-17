@@ -45,6 +45,14 @@ namespace EbookLibraryMongoDB
             //    mongoDbSettings.ConnectionString, mongoDbSettings.Name
             //);
 
+            //This snippet is needed to get sessions to work. Also cookies?
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);//We set Time here 
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
 
             services.AddControllersWithViews();
             services.AddScoped<BookService>();
@@ -67,7 +75,7 @@ namespace EbookLibraryMongoDB
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseSession();//added to support session variables
             app.UseRouting();
 
             app.UseAuthentication();
@@ -77,7 +85,13 @@ namespace EbookLibraryMongoDB
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    //pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Login}/{action=Index}/{id?}");//set the app's launch page to be whatever is done in the Index method of the Login controller
+                //map a custom route
+                endpoints.MapControllerRoute(
+                    name: "Register",//not sure where this comes into play
+                    pattern: "/reg",//the url that will trigger this route
+                    defaults: new { controller = "Register", action = "Index" });//the controller and method within the controller to call upon making a request to the specified url
                 endpoints.MapRazorPages();
             });
         }

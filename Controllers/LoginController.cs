@@ -3,6 +3,8 @@ using EbookLibraryMongoDB.Models;
 using EbookLibraryMongoDB.Services;
 using Microsoft.Extensions.Configuration;
 using System;
+using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.AspNetCore.Http;
 
 namespace EbookLibraryMongoDB.Controllers
 {
@@ -15,6 +17,7 @@ namespace EbookLibraryMongoDB.Controllers
         {
             this.config = config;
             this.userService = new UserService(config);
+            //var session = HttpContext.Session;
         }
 
         public IActionResult Index()
@@ -34,20 +37,28 @@ namespace EbookLibraryMongoDB.Controllers
         [HttpPost]
         public IActionResult Login(string UserEmail, string Password)
         {
-            if(userService.GetExisting(UserEmail) == 1)
+            System.Diagnostics.Debug.WriteLine("Entered login method");
+            bool result = userService.UserExists(UserEmail);
+            System.Diagnostics.Debug.WriteLine($"Result is {result}");
+            if (userService.UserExists(UserEmail))
             {
+                System.Diagnostics.Debug.WriteLine($"Found a user with email {UserEmail}");
                 User user = userService.Get(UserEmail, Password);
                 if(user == null)
                 {
+                    System.Diagnostics.Debug.WriteLine($"email or pass incorrect");
                     TempData["Message"] = $"Email or password was incorrect";
                     return RedirectToAction(nameof(Index));
                 } else
                 {
-                    //redirect to the "Index" method of the "Login" controller, in the global area (whole project, not in a specific 'Area')
+                    System.Diagnostics.Debug.WriteLine($"Found user, should have worked");
+                    HttpContext.Session.SetString("User", user.UserEmail);//set a session variable called User to be user.UserEmail
+                    //redirect to the "Index" method of the "User" controller, in the global area (whole project, not in a specific 'Area')
                     return RedirectToAction("Index", "User", new { area = "" });
                 }
             } else
             {
+                System.Diagnostics.Debug.WriteLine($"Didn't find user {UserEmail}");
                 TempData["Message"] = $"There is no user registered with that email";
                 return RedirectToAction(nameof(Index));
             }

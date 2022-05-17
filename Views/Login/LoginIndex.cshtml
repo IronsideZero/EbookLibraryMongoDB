@@ -7,7 +7,7 @@
 {
     <div class="p-1 mb-2 bg-success text-white">@ViewBag.Message</div>
 }
-<form method="post">
+<form asp-action="Login">
     <div class="form-group">
         <label asp-for="UserEmail"></label>
         <input asp-for="UserEmail" class="form-control" />

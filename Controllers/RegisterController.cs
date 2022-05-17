@@ -37,8 +37,8 @@ namespace EbookLibraryMongoDB.Controllers
 
             if (ModelState.IsValid)
             {
-                int alreadyExists = userService.GetExisting(UserEmail);
-                if (alreadyExists == -1)
+                bool alreadyExists = userService.UserExists(UserEmail);
+                if (alreadyExists)
                 {
                     TempData["Message"] = $"A user with that email already exists!";
                     return RedirectToAction(nameof(Index));
