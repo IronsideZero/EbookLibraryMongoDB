@@ -66,9 +66,9 @@
             <td>@Html.DisplayFor(modelItem => book.Language)</td>
             <td>@Html.DisplayFor(modelItem => book.ISBN)</td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new {id = book.Id}) |
-                @Html.ActionLink("Details", "Details", new {id = book.Id}) |
-                @Html.ActionLink("Delete", "Delete", new {id = book.Id}) 
+                @Html.ActionLink("Edit", "EditBook", new {ISBN = book.ISBN}) |
+                @Html.ActionLink("Details", "Details", new {ISBN = book.ISBN}) |
+                @Html.ActionLink("Delete", "Delete", new {ISBN = book.ISBN}) 
             </td>
         </tr>
     }

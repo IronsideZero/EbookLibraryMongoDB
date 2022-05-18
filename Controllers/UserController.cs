@@ -101,5 +101,18 @@ namespace EbookLibraryMongoDB.Controllers
                 return View();
             }
         }
+
+        /// <summary>
+        /// This method simply redirects from the User controller to the Books controller, and passes along the isbn of the book whose Edit button was clicked 
+        /// in the TempData
+        /// </summary>
+        /// <param name="isbn">Taken from the routeValues property of the Html.ActionLink method on the Index page</param>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult EditBook(string isbn)
+        {
+            TempData["isbn"] = isbn;
+            return RedirectToAction("Edit", "Books", new { area = "" });            
+        }
     }
 }

@@ -122,7 +122,6 @@ namespace EbookLibraryMongoDB.Services
         /// <param all book properties except Id primary key></param>
         public void UpdateAddBook(User user, string isbn, string title, string author, DateTime pubDate, string series, int posInSeries, bool owned, double avgPrice, string localFilePath, int pages, string language, List<Models.BookTag> tags, string description)
         {
-
             bool alreadyExists = false;
             Book newBook = CreateNewBook(isbn, title, author, pubDate, series, posInSeries, owned, avgPrice, localFilePath, pages, language, tags, description, out alreadyExists);
             if (alreadyExists)
@@ -150,6 +149,17 @@ namespace EbookLibraryMongoDB.Services
             var result = users.UpdateOne(filter, update);
         }
 
+        /// <summary>
+        /// Method to update a User object when the only change made was to a book in the User's books list
+        /// </summary>
+        /// <param name="user">The User to update, with the book list already changed</param>
+        public void UpdateUserEditedBook(User user)
+        {
+            var filter = Builders<User>.Filter.Eq("UserEmail", user.UserEmail);//set the filter so this only affects a document where the "UserEmail" field equals user.UserEmail
+            var update = Builders<User>.Update.Set("Books", user.Books);//on the document the filter allows through, set the "Books" field to be user.Books
+            var result = users.UpdateOne(filter, update);
+        }
+
         /*
          BOOK SERVICES
          */
@@ -160,10 +170,10 @@ namespace EbookLibraryMongoDB.Services
 
         /* Get operations for books, right now just by Id, will have to add search by all properties
          */
-        public Book GetBook(string id)
-        {
-            return books.Find(book => book.Id == id).FirstOrDefault();
-        }
+        //public Book GetBook(string id)
+        //{
+        //    return books.Find(book => book.Id == id).FirstOrDefault();
+        //}
 
         public Book GetBookByISBN(string ISBN)
         {
@@ -176,22 +186,22 @@ namespace EbookLibraryMongoDB.Services
             return book;
         }
 
-        public void UpdateBook(string id, Book bookIn)
-        {
-            books.ReplaceOne(book => book.Id == id, bookIn);
-        }
+        //public void UpdateBook(string id, Book bookIn)
+        //{
+        //    books.ReplaceOne(book => book.Id == id, bookIn);
+        //}
 
-        public void RemoveBook(Book bookIn)
-        {
-            books.DeleteOne(book => book.Id == bookIn.Id);
-        }
+        //public void RemoveBook(Book bookIn)
+        //{
+        //    books.DeleteOne(book => book.Id == bookIn.Id);
+        //}
 
-        public void RemoveBook(string id)
-        {
-            books.DeleteOne(book => book.Id == id);
-        }
+        //public void RemoveBook(string id)
+        //{
+        //    books.DeleteOne(book => book.Id == id);
+        //}
 
-        /// <summary>
+        /// <summary> **NOTE: METHOD DEPRECATED, USING CreateNewBookNoDb() INSTEAD**
         /// This method is called when the user creates a new book (or tries to). All fields are nullable except isbn, title, and author. If any of those are null, this method returns null. Otherwise, 
         /// a check is done to see if there is a matching isbn already existing. If so, that book is returned, and the out parameter is set to true to facilitate an alert to the user. Otherwise, a new 
         /// book is created, then added to the list of books. Then the out parameter is set to false, and the new book is returned.
@@ -221,6 +231,24 @@ namespace EbookLibraryMongoDB.Services
                 alreadyExists = true;
                 return existingBook;
             }
+        }
+
+        /// <summary>
+        /// This method is called when the user creates a new book (or tries to). All fields are nullable except isbn, title, and author. If any of those are null, this method returns null. Otherwise, 
+        /// a check is done to see if there is a matching isbn already existing. If so, that book is returned, and the out parameter is set to true to facilitate an alert to the user. Otherwise, a new 
+        /// book is created, then added to the user's list of books. Then the out parameter is set to false, and the new book is returned. The book is not added to the database as a separate object, 
+        /// as books are simply objects in the User object's list of books. 
+        /// </summary>
+        /// <param everything except id which will be blank but the field is needed for visual studio to do its thing></param>
+        /// <returns></returns>
+        public Book CreateNewBookNoDb(string isbn, string title, string author, DateTime pubDate, string series, int posInSeries, bool owned, double avgPrice, string localFilePath, int pages, string language, List<BookTag> tags, string description)
+        {
+            if (isbn == null || title == null || author == null)
+            {
+                return null;
+            }
+            Book newBook = new Book(isbn, title, author, pubDate, series, posInSeries, owned, avgPrice, localFilePath, pages, language, tags, description);
+            return newBook;
         }
 
         /*

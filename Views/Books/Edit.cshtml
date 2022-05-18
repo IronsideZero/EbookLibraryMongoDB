@@ -1,0 +1,119 @@
+﻿@model EbookLibraryMongoDB.Models.Book
+
+@{
+    ViewData["Title"] = "Edit";
+    //get the same of each tag and return them all to a comma-delimited string
+    string allTags = "";
+    if(Model.Tags != null)
+    {
+        if(Model.Tags.Count() > 1)
+        {
+            for(int i = 0; i < Model.Tags.Count() - 1; i++)
+            {
+                allTags += Model.Tags[i].Name + ", ";
+            }
+            allTags += Model.Tags[Model.Tags.Count() - 1].Name;
+        } else if(Model.Tags.Count() == 1)
+        {
+            allTags = Model.Tags[0].Name;
+        }
+    }
+    
+
+    System.Diagnostics.Debug.WriteLine($"alltags before edit is: {allTags}");
+}
+
+<h1>Edit</h1>
+
+<h4>Book</h4>
+<hr />
+<div class="row">
+    @{
+        if(TempData["ErrorMessage"] != null)
+        {
+            <p>@TempData["ErrorMessage"]</p>
+        }
+    }
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="ISBN" class="control-label"></label>
+                <input asp-for="ISBN" class="form-control" readonly/>
+                <span asp-validation-for="ISBN" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Author" class="control-label"></label>
+                <input asp-for="Author" class="form-control" />
+                <span asp-validation-for="Author" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PubDate" class="control-label"></label>
+                <input asp-for="PubDate" class="form-control" />
+                <span asp-validation-for="PubDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Series" class="control-label"></label>
+                <input asp-for="Series" class="form-control" />
+                <span asp-validation-for="Series" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PosInSeries" class="control-label"></label>
+                <input asp-for="PosInSeries" class="form-control" />
+                <span asp-validation-for="PosInSeries" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Owned" /> @Html.DisplayNameFor(model => model.Owned)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="AvgPrice" class="control-label"></label>
+                <input asp-for="AvgPrice" class="form-control" />
+                <span asp-validation-for="AvgPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LocalFilePath" class="control-label"></label>
+                <input asp-for="LocalFilePath" class="form-control" />
+                <span asp-validation-for="LocalFilePath" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Pages" class="control-label"></label>
+                <input asp-for="Pages" class="form-control" />
+                <span asp-validation-for="Pages" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Language" class="control-label"></label>
+                <input asp-for="Language" class="form-control" />
+                <span asp-validation-for="Language" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Tags" class="control-label"></label>
+                <input asp-for="Tags" class="form-control" value=@allTags/>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

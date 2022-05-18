@@ -32,10 +32,10 @@ namespace EbookLibraryMongoDB.Services
 
         /* Get operations for books, right now just by Id, will have to add search by all properties
          */
-        public Book Get(string id)
-        {
-            return books.Find(book => book.Id == id).FirstOrDefault();
-        }
+        //public Book Get(string id)
+        //{
+        //    return books.Find(book => book.Id == id).FirstOrDefault();
+        //}
 
         public Book GetByISBN(string ISBN)
         {
@@ -48,20 +48,20 @@ namespace EbookLibraryMongoDB.Services
             return book;
         }
 
-        public void Update(string id, Book bookIn)
-        {
-            books.ReplaceOne(book => book.Id == id, bookIn);
-        }
+        //public void Update(string id, Book bookIn)
+        //{
+        //    books.ReplaceOne(book => book.Id == id, bookIn);
+        //}
 
-        public void Remove(Book bookIn)
-        {
-            books.DeleteOne(book => book.Id == bookIn.Id);
-        }
+        //public void Remove(Book bookIn)
+        //{
+        //    books.DeleteOne(book => book.Id == bookIn.Id);
+        //}
 
-        public void Remove(string id)
-        {
-            books.DeleteOne(book => book.Id == id);
-        }
+        //public void Remove(string id)
+        //{
+        //    books.DeleteOne(book => book.Id == id);
+        //}
 
         /// <summary>
         /// This method is called when the user creates a new book (or tries to). All fields are nullable except isbn, title, and author. If any of those are null, this method returns null. Otherwise, 
