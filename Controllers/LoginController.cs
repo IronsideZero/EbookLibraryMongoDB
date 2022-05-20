@@ -12,12 +12,13 @@ namespace EbookLibraryMongoDB.Controllers
     {
         private IConfiguration config;
         private UserService userService;
-        //private readonly DatabaseService db;
+        private readonly DatabaseService db;
 
-        public LoginController(IConfiguration config)
+        public LoginController(IConfiguration config, DatabaseService db)
         {
             this.config = config;
             this.userService = new UserService(config);
+            this.db = db;
             //var session = HttpContext.Session;
         }
 
@@ -39,12 +40,12 @@ namespace EbookLibraryMongoDB.Controllers
         public IActionResult Login(string UserEmail, string Password)
         {
             System.Diagnostics.Debug.WriteLine("Entered login method");
-            bool result = userService.UserExists(UserEmail);
+            bool result = db.UserExists(UserEmail);
             System.Diagnostics.Debug.WriteLine($"Result is {result}");
-            if (userService.UserExists(UserEmail))
+            if (db.UserExists(UserEmail))
             {
                 System.Diagnostics.Debug.WriteLine($"Found a user with email {UserEmail}");
-                User user = userService.Get(UserEmail, Password);
+                User user = db.GetUser(UserEmail, Password);
                 if(user == null)
                 {
                     System.Diagnostics.Debug.WriteLine($"email or pass incorrect");
