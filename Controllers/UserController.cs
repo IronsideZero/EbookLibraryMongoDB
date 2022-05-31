@@ -111,8 +111,36 @@ namespace EbookLibraryMongoDB.Controllers
         [HttpGet]
         public ActionResult EditBook(string isbn)
         {
-            TempData["isbn"] = isbn;
-            return RedirectToAction("Edit", "Books", new { area = "" });            
+            if(string.IsNullOrEmpty(isbn))
+            {
+                TempData["Error Message"] = "Error: isbn not found.";
+                return RedirectToAction(nameof(Index));
+            } else
+            {
+                TempData["isbn"] = isbn;
+                return RedirectToAction("Edit", "Books", new { area = "" });
+            }
+                        
+        }
+
+        /// <summary>
+        /// This method simply redirects from the User controller to the Books controller, and passes along the isbn of the book whose Details button was clicked 
+        /// as a url parameter
+        /// </summary>
+        /// <param name="isbn">Taken from the routeValues property of the Html.ActionLink method on the Index page</param>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult ShowBookDetails(string isbn)
+        {
+            //TempData["isbn"] = isbn;
+            if(string.IsNullOrEmpty(isbn))
+            {
+                TempData["Error Message"] = "Error: isbn not found.";
+                return RedirectToAction(nameof(Index));
+            } else
+            {
+                return RedirectToAction("ShowDetails", "Books", new { area = "", isbn = isbn });
+            }                
         }
     }
 }

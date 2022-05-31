@@ -162,7 +162,18 @@ namespace EbookLibraryMongoDB.Controllers
             string isbn = (string)TempData["isbn"];
             TempData["isbn"] = isbn;
             Book book = db.GetBookByISBN(isbn);
-            return View(book);
+
+            User owner = db.GetUser(HttpContext.Session.GetString("User"));
+            Book bookToEdit = owner.Books.Find(book => book.ISBN == isbn);
+            if(bookToEdit != null)
+            {                
+                return View(bookToEdit);
+            } else
+            {
+                TempData["ErrorMessage"] = "That book could not be found in your library. You may only edit details of a book in your library. Please check the ISBN, or add the book to your library before editing.";
+                return RedirectToAction("Index", "User", new { area = "" });
+            }
+            
         }
 
         /// <summary>
@@ -280,18 +291,41 @@ namespace EbookLibraryMongoDB.Controllers
             existingBook.Language = language;
             existingBook.Description = description;
             existingBook.Tags = appliedTags;
-
+        
             owner.Books[indexOfExistingBook] = existingBook;
 
             try
             {                
                 db.UpdateUserEditedBook(owner);
-                return RedirectToAction("Index", "User", new { area = "" });//change this to go to the edited book's details page later
+                //return RedirectToAction("Index", "User", new { area = "" });//change this to go to the edited book's details page later
+                return RedirectToAction("ShowDetails", "Books", new { area = "", isbn = isbn});
             } catch
             {
                 TempData["ErrorMessage"] = $"Something went wrong while attempting to update your library.";
                 return RedirectToAction(nameof(Edit));
             }
+        }
+
+        //GET:
+        public ActionResult ShowDetails(string isbn)
+        {
+            System.Diagnostics.Debug.WriteLine($"isbn is: {isbn}");
+            User owner = db.GetUser(HttpContext.Session.GetString("User"));
+            Book bookToDisplay = owner.Books.Find(book => book.ISBN == isbn);
+            if(bookToDisplay != null)
+            {
+                return View(bookToDisplay);
+            } else
+            {
+                TempData["ErrorMessage"] = "That book could not be found in your library. You may only edit details of a book in your library. Please check the ISBN, or add the book to your library before editing.";
+                return RedirectToAction("Index", "User", new { area = "" });
+            }            
+        }
+
+        //GET:
+        public ActionResult ReturnToIndex()
+        {
+            return RedirectToAction("Index", "User", new { area = "" });
         }
 
         // GET: BooksController/Delete/5

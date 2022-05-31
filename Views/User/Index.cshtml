@@ -67,7 +67,7 @@
             <td>@Html.DisplayFor(modelItem => book.ISBN)</td>
             <td>
                 @Html.ActionLink("Edit", "EditBook", new {ISBN = book.ISBN}) |
-                @Html.ActionLink("Details", "Details", new {ISBN = book.ISBN}) |
+                @Html.ActionLink("Details", "ShowBookDetails", new {ISBN = book.ISBN}) |
                 @Html.ActionLink("Delete", "Delete", new {ISBN = book.ISBN}) 
             </td>
         </tr>
@@ -76,6 +76,14 @@
     <form asp-controller="Books" asp-action="Index">
         <button type="submit" class="btn btn-primary">Add Book</button>
     </form>
+</div>
+<div>
+    @{
+        if(TempData["ErrorMessage"] != null)
+        {
+            <p>@TempData["ErrorMessage"]</p>
+        }
+    }
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
